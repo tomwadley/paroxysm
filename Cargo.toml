@@ -1,0 +1,11 @@
+[package]
+name = "stock-vibrate"
+version = "0.1.0"
+authors = ["Tom Wadley <tom@tomwadley.net>"]
+
+[dependencies]
+serde_json = "1.0"
+time = "0.1"
+chan = "0.1"
+reqwest = "0.8"
+config = "0.7.0"
