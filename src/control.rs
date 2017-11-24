@@ -58,10 +58,12 @@ mod tests {
     #[test]
     fn controls() {
         let bd_addr = load_config().get_str("bd_addr").unwrap();
-        let mut controller = super::Controller::new(&bd_addr, 10);
-        thread::sleep(time::Duration::from_secs(5));
+        let mut controller = super::Controller::new(&bd_addr, 20);
+        thread::sleep(time::Duration::from_secs(1));
         controller.set_vibration(5);
-        thread::sleep(time::Duration::from_secs(5));
+        thread::sleep(time::Duration::from_secs(1));
+        controller.set_vibration(0);
+        thread::sleep(time::Duration::from_secs(1));
     }
 
     fn load_config() -> config::Config {
