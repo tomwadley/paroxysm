@@ -2,6 +2,7 @@ extern crate vibrate_experiment;
 extern crate config;
 
 use vibrate_experiment::market_momentum::MarketMomentum;
+use vibrate_experiment::morse;
 
 fn main() {
     let mut conf = config::Config::new();
@@ -12,4 +13,6 @@ fn main() {
 
     let mut market_momentum = MarketMomentum::new(&bd_addr, &api_key);
     market_momentum.start();
+
+//    morse::morse(&bd_addr)
 }

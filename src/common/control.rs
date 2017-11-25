@@ -1,23 +1,32 @@
-use std::process::Command;
-use std::process::Child;
+use std::process::{Command,Child,Stdio};
 use std::iter::FromIterator;
+use std::thread;
+use std::time::Duration;
 
-pub struct Controller {
+pub trait Controller {
+    fn set_vibration(&mut self, vibration: u8);
+}
+
+pub struct GatttoolController {
     device_addr: String,
     p: Child,
 }
 
-impl Controller {
-    pub fn new(device_addr: &str, init_vibration: u8) -> Controller {
-        Controller {
-            device_addr: String::from(device_addr),
-            p: Controller::run_cmd(device_addr, init_vibration)
-        }
-    }
-
-    pub fn set_vibration(&mut self, vibration: u8) {
+impl Controller for GatttoolController {
+    fn set_vibration(&mut self, vibration: u8) {
         self.p.kill();
-        self.p = Controller::run_cmd(&self.device_addr, vibration);
+        self.p = GatttoolController::run_cmd(&self.device_addr, vibration);
+    }
+}
+
+impl GatttoolController {
+    pub fn new(device_addr: &str, init_vibration: u8) -> GatttoolController {
+        let p = GatttoolController::run_cmd(device_addr, init_vibration);
+
+        // Give it a chance to wake up
+        thread::sleep(Duration::from_millis(2000));
+
+        GatttoolController { device_addr: String::from(device_addr), p }
     }
 
     fn run_cmd(device_addr: &str, vibration: u8) -> Child {
@@ -30,8 +39,9 @@ impl Controller {
             .arg("-a")
             .arg("0x000e")
             .arg("-n")
-            .arg(Controller::vibrate_arg(vibration))
+            .arg(GatttoolController::vibrate_arg(vibration))
             .arg("--listen")
+            .stdout(Stdio::null())
             .spawn().unwrap()
     }
 
@@ -42,7 +52,7 @@ impl Controller {
     }
 }
 
-impl Drop for Controller {
+impl Drop for GatttoolController {
     fn drop(&mut self) {
         self.p.kill().expect("Failed to kill process");
     }
@@ -54,11 +64,12 @@ mod tests {
 
     use std::thread;
     use std::time;
+    use super::Controller;
 
     #[test]
     fn controls() {
         let bd_addr = load_config().get_str("bd_addr").unwrap();
-        let mut controller = super::Controller::new(&bd_addr, 20);
+        let mut controller = super::GatttoolController::new(&bd_addr, 20);
         thread::sleep(time::Duration::from_secs(1));
         controller.set_vibration(5);
         thread::sleep(time::Duration::from_secs(1));

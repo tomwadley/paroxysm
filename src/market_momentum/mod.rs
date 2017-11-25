@@ -7,12 +7,12 @@ extern crate chan;
 
 use std::time::Duration;
 use self::fetch::Fetcher;
-use common::control::Controller;
+use common::control::{Controller,GatttoolController};
 
 pub struct MarketMomentum {
     vibration: u8,
     fetcher: Fetcher,
-    controller: Controller,
+    controller: GatttoolController,
 }
 
 impl MarketMomentum {
@@ -20,7 +20,7 @@ impl MarketMomentum {
         MarketMomentum {
             vibration: 0,
             fetcher: Fetcher::new(api_key),
-            controller: Controller::new(bd_addr, 0)
+            controller: GatttoolController::new(bd_addr, 0),
         }
     }
 
