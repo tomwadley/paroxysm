@@ -32,7 +32,7 @@ fn latest_entry(data: &mut Vec<(time::Tm, f64)>) -> &(time::Tm, f64) {
 mod tests {
     extern crate serde_json;
 
-    const MOM_JSON: &'static str = include_str!("resources/alphavantage-mom.json");
+    const MOM_JSON: &'static str = include_str!("resources/test/alphavantage-mom.json");
 
     #[test]
     fn transforms() {

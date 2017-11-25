@@ -1,4 +1,4 @@
-# stock-vibrate
+# vibrate_experiment
 
 Adjusts the vibration of your Lovense Vibrator with the momentum of the stock market.
 
