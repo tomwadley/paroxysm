@@ -1,22 +1,14 @@
 extern crate serde_json;
-extern crate chrono;
 
+use neo::Neo;
 use self::serde_json::Value;
-use self::chrono::prelude::*;
+use neo::chrono::prelude::*;
 use std::collections::HashMap;
 use std::iter::FromIterator;
 
 const NEO_CA_VERSION: &'static str = "1.1";
 
 type FieldIndices = HashMap<String, usize>;
-
-#[derive(PartialEq, Debug)]
-pub struct Neo {
-    designation: String,
-    ca_time: DateTime<Utc>,
-    velocity: f64,
-    magnitude: f64,
-}
 
 pub fn parse(json: Value) -> Vec<Neo> {
     check_version(&json);
@@ -65,8 +57,7 @@ fn check_version(json: &Value) {
 #[cfg(test)]
 mod tests {
     extern crate serde_json;
-    extern crate chrono;
-    use self::chrono::prelude::*;
+    use neo::chrono::prelude::*;
 
     const NEO_JSON: &'static str = include_str!("resources/test/neo-ca.json");
 
