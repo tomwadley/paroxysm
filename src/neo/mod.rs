@@ -1,3 +1,4 @@
+mod fetch;
 mod parse;
 mod calculate;
 
