@@ -12,9 +12,10 @@ type FieldIndices = HashMap<String, usize>;
 
 pub fn parse(json: Value) -> Vec<Neo> {
     check_version(&json);
-    let fi = get_field_indices(&json);
-    json["data"].as_array().unwrap().iter()
-        .map(|v| parse_entry(v, &fi)).collect()
+    json["data"].as_array().map(|data| {
+        let fi = get_field_indices(&json);
+        data.iter().map(|v| parse_entry(v, &fi)).collect()
+    }).unwrap_or(vec![])
 }
 
 fn get_field_indices(json: &Value) -> FieldIndices {
@@ -60,6 +61,7 @@ mod tests {
     use neo::chrono::prelude::*;
 
     const NEO_JSON: &'static str = include_str!("resources/test/neo-ca.json");
+    const NEO_JSON_EMPTY: &'static str = include_str!("resources/test/neo-ca-empty.json");
 
     #[test]
     fn transforms() {
@@ -71,5 +73,12 @@ mod tests {
             velocity: 20.4414586660904,
             magnitude: 24.754,
         });
+    }
+
+    #[test]
+    fn transforms_empty() {
+        let json = serde_json::from_str(NEO_JSON_EMPTY).unwrap();
+
+        assert!(super::parse(json).is_empty());
     }
 }

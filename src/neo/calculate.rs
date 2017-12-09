@@ -7,12 +7,16 @@ const DENSITY_KG_KM3: f64 = 2_000_000_000_000.0;
 const ALBEDO: f64 = 0.2;
 
 impl Neo {
-    fn momentum_kg_km_s(&self) -> f64 {
+    pub fn momentum_kg_km_s(&self) -> f64 {
         mass_of_neo_kg(diameter_of_neo_km(self.magnitude)) * self.velocity
     }
 
-    fn seconds_until_ca(&self, now: DateTime<Utc>) -> i64 {
+    pub fn seconds_until_ca(&self, now: DateTime<Utc>) -> i64 {
         self.ca_time.signed_duration_since(now).num_seconds()
+    }
+
+    pub fn next_ca(neos: &Vec<Neo>, now: DateTime<Utc>) -> Option<&Neo> {
+        neos.iter().min_by_key(|n| n.seconds_until_ca(now))
     }
 }
 
@@ -63,6 +67,16 @@ mod tests {
         let now = Utc::now();
         let neo = create_neo(now);
         assert_eq!(neo.seconds_until_ca(now), 100);
+    }
+
+    #[test]
+    fn calculates_next_ca() {
+        let now = Utc::now();
+        let neo1 = create_neo(now);
+        let mut neo2 = create_neo(now);
+        neo2.ca_time = now + Duration::seconds(50);
+        neo2.designation = String::from("first");
+        assert_eq!(super::Neo::next_ca(&vec![neo1, neo2], now).unwrap().designation, "first");
     }
 
     fn create_neo(now: DateTime<Utc>) -> super::Neo {
