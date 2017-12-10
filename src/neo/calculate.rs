@@ -16,7 +16,9 @@ impl Neo {
     }
 
     pub fn next_ca(neos: &Vec<Neo>, now: DateTime<Utc>) -> Option<&Neo> {
-        neos.iter().min_by_key(|n| n.seconds_until_ca(now))
+        neos.iter()
+            .filter(|n| n.seconds_until_ca(now) > 0)
+            .min_by_key(|n| n.seconds_until_ca(now))
     }
 }
 
@@ -75,8 +77,11 @@ mod tests {
         let neo1 = create_neo(now);
         let mut neo2 = create_neo(now);
         neo2.ca_time = now + Duration::seconds(50);
-        neo2.designation = String::from("first");
-        assert_eq!(super::Neo::next_ca(&vec![neo1, neo2], now).unwrap().designation, "first");
+        neo2.designation = String::from("next");
+        let mut neo3 = create_neo(now);
+        neo3.ca_time = now + Duration::seconds(-50);
+        neo3.designation = String::from("past");
+        assert_eq!(super::Neo::next_ca(&vec![neo1, neo2, neo3], now).unwrap().designation, "next");
     }
 
     fn create_neo(now: DateTime<Utc>) -> super::Neo {
