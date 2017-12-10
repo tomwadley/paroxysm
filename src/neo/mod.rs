@@ -1,6 +1,8 @@
 mod fetch;
 mod parse;
 mod calculate;
+mod vibration;
+mod frequency;
 
 extern crate chrono;
 
@@ -23,16 +25,18 @@ fn run(bd_addr: &str) {
     let mut controller = GatttoolController::new(bd_addr, 0);
 
     for_each_ca(|neo| {
-        let now = Utc::now();
-        let intensity = 10; // TODO: calculate from momentum
+        let vibration = vibration::from_momentum(neo.momentum_kg_km_s());
+        let mut seconds_until_ca = neo.seconds_until_ca(Utc::now());
 
-        while neo.seconds_until_ca(now) > 0 {
-            let frequency = Duration::from_millis(500); // TODO: calculate from seconds until CA
+        while seconds_until_ca > 0 {
+            let frequency = frequency::from_seconds_ms(seconds_until_ca);
 
-            controller.set_vibration(intensity);
+            controller.set_vibration(vibration);
             thread::sleep(Duration::from_millis(PULSE_DURATION_MS));
             controller.set_vibration(0);
-            thread::sleep(frequency);
+            thread::sleep(Duration::from_millis(frequency));
+
+            seconds_until_ca = neo.seconds_until_ca(Utc::now());
         }
     })
 }
