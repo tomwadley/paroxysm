@@ -5,6 +5,7 @@ extern crate clap;
 
 use vibrate_experiment::market_momentum::MarketMomentum;
 use vibrate_experiment::morse;
+use vibrate_experiment::neo;
 use clap::{ App, SubCommand};
 
 fn main() {
@@ -14,6 +15,7 @@ fn main() {
         .about(crate_description!())
         .subcommand(SubCommand::with_name("market"))
         .subcommand(SubCommand::with_name("morse"))
+        .subcommand(SubCommand::with_name("neo"))
         .get_matches();
 
     let mut conf = config::Config::new();
@@ -30,6 +32,9 @@ fn main() {
         },
         Some("morse") => {
             morse::morse(&bd_addr);
+        },
+        Some("neo") => {
+            neo::run(&bd_addr);
         }
         _ => println!("{}", matches.usage())
     }

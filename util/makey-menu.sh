@@ -11,7 +11,7 @@ BIN=$1
 
 UP="market"
 DOWN="morse"
-#RIGHT=""
+RIGHT="neo"
 #LEFT=""
 
 pid=""
@@ -24,8 +24,8 @@ do
         IFS="" read -n 1 k
         [ "$k" == "A" ] && mode="$UP"
         [ "$k" == "B" ] && mode="$DOWN"
-#        [ "$k" == "C" ] && cmd="$RIGHT"
-#        [ "$k" == "D" ] && cmd="$LEFT"
+        [ "$k" == "C" ] && mode="$RIGHT"
+#        [ "$k" == "D" ] && mode="$LEFT"
         [ "$k" == " " ] && exit 0 # Space key exits
 
         [ "$mode" == "" ]

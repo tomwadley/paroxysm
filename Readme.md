@@ -5,7 +5,8 @@ Experimental modes for your Lovense vibrator
 Modes:
 
  - `market` - control your vibrator according to stock market momentum
- - `morse` - read, via morse code vibrations, the [Interior Scroll by Carolee Schneemann](http://emuseum.cornell.edu/view/objects/asitem/items$0040:43716) 
+ - `morse` - read, via morse code vibrations, the [Interior Scroll by Carolee Schneemann](http://emuseum.cornell.edu/view/objects/asitem/items$0040:43716)
+ - `neo` - track asteroids approaching the Earth via pulses (frequency = distance, intensity = momentum) - data from [CNEOS](https://cneos.jpl.nasa.gov/ca/) 
 
 ## Requirements
 

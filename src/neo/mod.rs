@@ -21,24 +21,32 @@ pub struct Neo {
     magnitude: f64,
 }
 
-fn run(bd_addr: &str) {
+pub fn run(bd_addr: &str) {
     let mut controller = GatttoolController::new(bd_addr, 0);
 
     for_each_ca(|neo| {
         let vibration = vibration::from_momentum(neo.momentum_kg_km_s());
         let mut seconds_until_ca = neo.seconds_until_ca(Utc::now());
 
+        println!("Tracking NEO '{}', vibration = {} (m = {}), seconds until CA = {}",
+                 neo.designation, vibration, neo.momentum_kg_km_s(), seconds_until_ca);
+
         while seconds_until_ca > 0 {
             let frequency = frequency::from_seconds_ms(seconds_until_ca);
+            println!("{}", frequency);
 
-            controller.set_vibration(vibration);
-            thread::sleep(Duration::from_millis(PULSE_DURATION_MS));
-            controller.set_vibration(0);
-            thread::sleep(Duration::from_millis(frequency));
+            pulse(&mut controller, frequency, vibration);
 
             seconds_until_ca = neo.seconds_until_ca(Utc::now());
         }
     })
+}
+
+fn pulse(controller: &mut Controller, frequency: u64, vibration: u8) {
+    controller.set_vibration(vibration);
+    thread::sleep(Duration::from_millis(PULSE_DURATION_MS));
+    controller.set_vibration(0);
+    thread::sleep(Duration::from_millis(frequency));
 }
 
 fn for_each_ca<F>(mut f: F) where F: FnMut(&Neo) {
