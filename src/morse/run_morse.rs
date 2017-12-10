@@ -37,16 +37,21 @@ mod tests {
     use common::control::Controller;
     use morse::morse_control::MorseControl;
 
-    struct FakeController;
+    struct FakeController {
+        history: Vec<u8>
+    }
+
     impl Controller for FakeController {
-        fn set_vibration(&mut self, _vibration: u8) {
-            // no-op
+        fn set_vibration(&mut self, vibration: u8) {
+            self.history.push(vibration);
         }
     }
 
     #[test]
     fn morse_code() {
-        let timing_str = super::run_morse(get_morse_control(), "MORSE CODE");
+        let mut stub = FakeController { history: vec![] };
+        let morse_control = MorseControl::new(0, 5, &mut stub);
+        let timing_str = super::run_morse(morse_control, "MORSE CODE");
 
         assert_eq!(timing_str, "===.===...===.===.===...=.===.=...=.=.=...=.......===.=.===.=...===.===.===...===.=.=...=")
     }
@@ -54,12 +59,20 @@ mod tests {
     #[test]
     fn runs_entire_text() {
         const TEXT: &'static str = include_str!("resources/schneemann.txt");
+        let mut stub = FakeController { history: vec![] };
+        let morse_control = MorseControl::new(0, 5, &mut stub);
 
-        super::run_morse(get_morse_control(), TEXT);
+        super::run_morse(morse_control, TEXT);
     }
 
-    fn get_morse_control() -> MorseControl {
-        let controller = FakeController {};
-        MorseControl::new(0, 5, Box::new(controller))
+    #[test]
+    fn sets_vibration() {
+        let mut stub = FakeController { history: vec![] };
+        {
+            let morse_control = MorseControl::new(0, 5, &mut stub);
+            super::run_morse(morse_control, "ee e");
+        }
+
+        assert_eq!(stub.history, vec![5, 0, 5, 0, 5, 0]);
     }
 }

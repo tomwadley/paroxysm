@@ -11,8 +11,8 @@ const VIBRATION: u8 = 10;
 const TEXT: &'static str = include_str!("resources/schneemann.txt");
 
 pub fn morse(bd_addr: &str) {
-    let controller = GatttoolController::new(bd_addr, 0);
-    let morse_control = morse_control::MorseControl::new(DOT_LEN, VIBRATION, Box::new(controller));
+    let mut controller = GatttoolController::new(bd_addr, 0);
+    let morse_control = morse_control::MorseControl::new(DOT_LEN, VIBRATION, &mut controller);
 
     run_morse(morse_control, TEXT);
 }

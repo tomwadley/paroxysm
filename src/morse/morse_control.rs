@@ -2,14 +2,14 @@ use common::control::Controller;
 use std::thread;
 use std::time::Duration;
 
-pub struct MorseControl {
+pub struct MorseControl<'a> {
     dot_len: u64,
     vibration: u8,
-    controller: Box<Controller>,
+    controller: &'a mut Controller,
 }
 
-impl MorseControl {
-    pub fn new(dot_len: u64, vibration: u8, controller: Box<Controller>) -> MorseControl {
+impl<'a> MorseControl<'a> {
+    pub fn new(dot_len: u64, vibration: u8, controller: &'a mut Controller) -> MorseControl<'a> {
         MorseControl { dot_len, vibration, controller }
     }
 
