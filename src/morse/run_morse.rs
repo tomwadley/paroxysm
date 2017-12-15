@@ -10,7 +10,7 @@ pub fn run_morse(mut morse_control: MorseControl, text: &str) -> String {
 
     for c in text.chars() {
         print!("{}", c);
-        io::stdout().flush();
+        let _ = io::stdout().flush();
 
         if WHITESPACE.contains(&c) {
             t += morse_control.word_space();

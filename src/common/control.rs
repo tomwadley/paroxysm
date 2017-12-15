@@ -14,7 +14,7 @@ pub struct GatttoolController {
 
 impl Controller for GatttoolController {
     fn set_vibration(&mut self, vibration: u8) {
-        self.p.kill();
+        let _ = self.p.kill();
         self.p = GatttoolController::run_cmd(&self.device_addr, vibration);
     }
 }

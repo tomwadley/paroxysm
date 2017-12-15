@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 const MIN_SECONDS: f64 = 60.0;
 const MAX_SECONDS: f64 = 60.0 * 60.0 * 10.0; // 10 hours
 const MIN_FREQUENCY_MS: f64 = 200.0;
