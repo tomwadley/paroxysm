@@ -1,8 +1,8 @@
 [package]
-name = "vibrate-experiment"
+name = "paroxysm"
 version = "0.1.0"
 authors = ["Tom Wadley <tom@tomwadley.net>", "Rosa Nussbaum <rosa@rosanussbaum.com>"]
-description = "Experimental modes for your Lovense vibrator"
+description = "A collection of modes for your Lovense vibrator"
 
 [dependencies]
 serde_json = "1.0"

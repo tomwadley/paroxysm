@@ -1,6 +1,6 @@
-# Vibrate experiment
+# Paroxysm
 
-Experimental modes for your Lovense vibrator
+A collection of modes for your Lovense vibrator
 
 Modes:
 

@@ -1,11 +1,11 @@
-extern crate vibrate_experiment;
+extern crate paroxysm;
 extern crate config;
 #[macro_use]
 extern crate clap;
 
-use vibrate_experiment::market_momentum::MarketMomentum;
-use vibrate_experiment::morse;
-use vibrate_experiment::neo;
+use paroxysm::market_momentum::MarketMomentum;
+use paroxysm::morse;
+use paroxysm::neo;
 use clap::{ App, SubCommand};
 
 fn main() {

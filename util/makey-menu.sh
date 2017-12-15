@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if (( $# == 0 )); then
-    echo "USAGE: ./makey-menu.sh path/to/vibrate-experiment"
+    echo "USAGE: ./makey-menu.sh path/to/paroxysm"
     echo ""
     echo "A Makey Makey menu interface for switching modes"
     exit 1
